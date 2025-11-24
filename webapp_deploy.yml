@@ -1,0 +1,30 @@
+---
+- name: Apache2
+  hosts: appservers
+  become: yes
+
+  tasks:
+    - name: apache2
+      apt:
+        update_cache: yes
+  
+    - name: Installer apache2
+      apt:
+        name: apache2
+        state: present
+    
+    - name: Installer Git
+      git:
+      repo: https://github.com/AnthoGit-afpa/Ansible.git
+      dest: ~/home
+    - name: Vérification installation apache2
+      service: 
+        name: apache2
+        state: started
+        enabled: ye
+   
+    - name: Supprimer index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent 
+     
