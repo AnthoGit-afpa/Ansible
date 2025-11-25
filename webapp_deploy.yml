@@ -3,28 +3,68 @@
   hosts: appservers
   become: yes
 
+  vars:
+    sitename: SiteWeb2.0
+    sitepath: /home/vagrant/SiteWeb2
+    site_port: 80
+
   tasks:
     - name: apache2
       apt:
         update_cache: yes
-  
+
     - name: Installer apache2
       apt:
         name: apache2
         state: present
-    
+
     - name: Installer Git
       git:
-      repo: https://github.com/AnthoGit-afpa/Ansible.git
-      dest: ~/home
-    - name: Vérification installation apache2
-      service: 
-        name: apache2
-        state: started
-        enabled: ye
-   
+        repo: https://github.com/AnthoGit-afpa/Ansible.git
+        dest: /home/vagrant/github
+
     - name: Supprimer index.html
       file:
         path: /var/www/html/index.html
-        state: absent 
-     
+        state: absent
+
+    - name:
+      file:
+        path: "{{sitepath}}"
+        state: directory
+        mode: '0755'
+        owner: www-data
+        group: www-data
+
+    - name: Récupération du fichier index.php
+      get_url:
+        url: https://raw.githubusercontent.com/AnthoGit-afpa/Ansible/refs/heads/main/index.html
+        dest: "/home/vagrant/SiteWeb2"
+
+
+    - name: Déployer le VirtualHost via template
+      template:
+        src: vhost.j2
+        dest: "/etc/apache2/sites-available/{{ sitename }}.conf"
+        mode: '0644'
+      notify: Reload Apache
+
+    - name: Activer le site personnalisé
+      command: "a2ensite {{ sitename }}.conf"
+      notify: Reload Apache
+
+    - name: Désactiver le site par défaut
+      command: "a2dissite 000-default.conf"
+      notify: Reload Apache
+
+    - name: Vérification installation apache2
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Reload Apache
+      service:
+       name: apache2
+       state: restarted
