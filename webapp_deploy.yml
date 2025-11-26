@@ -1,7 +1,19 @@
 ---
 - name: Apache2
-  hosts: appservers
+  hosts: app1
   become: yes
+  var_files:
+    - vars/sites_vars.yml
+  roles:
+    - apache2
+
+- name: Configurer MariaDB
+  hosts: app2
+  become: yes
+  vars_files:
+    - vars/site_vars.yml
+  roles:
+    - mariadb
 
   vars:
     sitename: SiteWeb2.0
@@ -38,7 +50,7 @@
 
     - name: Récupération du fichier index.php
       get_url:
-        url: https://raw.githubusercontent.com/AnthoGit-afpa/Ansible/refs/heads/main/index.html
+        url: https://raw.githubusercontent.com/AnthoGit-afpa/Ansible/refs/heads/main/index.php
         dest: "/home/vagrant/SiteWeb2"
 
 

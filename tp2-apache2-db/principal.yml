@@ -1,0 +1,17 @@
+---
+- name: deploiement Apache2
+  hosts: app1
+  become: yes
+  vars_files:
+    - /home/antho/Ansible/TP-ANSIBLE/tp2-apache2-db/roles/vars/vars.yml
+  roles:
+    - apache2
+
+
+- name: deploiement DB
+  hosts: app2
+  become: yes
+  vars_files:
+    - /home/antho/Ansible/TP-ANSIBLE/tp2-apache2-db/roles/vars/vars.yml
+  roles:
+    - mariadb
