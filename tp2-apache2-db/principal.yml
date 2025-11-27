@@ -12,6 +12,7 @@
   hosts: app2
   become: yes
   vars_files:
-    - /home/antho/Ansible/TP-ANSIBLE/tp2-apache2-db/roles/vars/vars.yml
+    - /home/antho/Ansible/TP-ANSIBLE/tp2-apache2-db/roles/mariadb/vars/vars.yml
+    - /home/antho/Ansible/TP-ANSIBLE/tp2-apache2-db/roles/mariadb/vars/vault.yml
   roles:
     - mariadb

@@ -1,7 +1,0 @@
-sitename: SiteWeb2.0
-sitepath: /home/vagrant/SiteWeb2
-siteport: 80
-
-db_name: my_datebase
-db_user: my_user
-db_password: my password

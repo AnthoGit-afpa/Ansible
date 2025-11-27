@@ -1,0 +1,4 @@
+#sitename: "SiteWeb2.0"
+sitename: 192.168.56.111
+sitepath: "/var/www/covoit"
+siteport: 80

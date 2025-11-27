@@ -7,28 +7,43 @@
     name: apache2
     state: present
 
-- name: Installer Git
-  git:
-    repo: https://github.com/AnthoGit-afpa/Ansible.git
-    dest: /home/vagrant/github
 
 - name: Supprimer index.html
   file:
     path: /var/www/html/index.html
     state: absent
 
-- name:
+- name: Répertoire du site
   file:
     path: "{{ sitepath }}"
     state: directory
     mode: '0755'
+
+- name: Suppr var/
+  file:
+    path: /var/www/covoit
+    state: absent
+  become: yes
+
+- name: Cloner le dépôt Git de l'application
+  git:
+    repo: https://github.com/AnthoGit-afpa/AppCovoit.git
+    dest: "{{ sitepath }}"
+    version: main   # ou la branche que tu veux
+    force: yes      # écrase si le dossier existe déjà
+    update: yes
+
+- name: Déclarer safe directory pour Git
+  command: git config --global --add safe.directory /var/www/covoit
+  become: yes
+
+- name: Fixer les permissions sur le site
+  file:
+    path: "{{ sitepath }}"
+    state: directory
     owner: www-data
     group: www-data
-
-- name: Récupération du fichier index.php
-  get_url:
-    url: https://raw.githubusercontent.com/AnthoGit-afpa/Ansible/refs/heads/main/index.php
-    dest: "{{ sitepath }}/index.html"
+    recurse: yes
 
 - name: Déployer le VirtualHost via template
   template:

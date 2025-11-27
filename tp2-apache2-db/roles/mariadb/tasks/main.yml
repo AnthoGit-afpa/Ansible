@@ -2,12 +2,12 @@
   apt:
     name: mariadb-server
     state: present
+  notify: Reload MariaDB
 
 - name: Verif mariaDB activ
   service:
     name: mariadb
     enabled: yes
-    state: started
 
 - name: Créer l'utilisateur admin MariaDB pour Ansible (via root + socket)
   community.mysql.mysql_user:
@@ -41,8 +41,8 @@
     login_password: "PasswordAnsible123"
 
 - name: Copier le schéma SQL sur le serveur
-  ansible.builtin.copy:
-    src: schema.sql
+  get_url:
+    url: "https://raw.githubusercontent.com/AnthoGit-afpa/AppCovoit/refs/heads/main/schema.sql"
     dest: /tmp/schema.sql
     mode: '0644'
 
@@ -51,5 +51,5 @@
     name: "{{ db_name }}"
     state: import
     target: /tmp/schema.sql
-    login_user: ansible
-    login_password: "PasswordAnsible123"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_password }}"

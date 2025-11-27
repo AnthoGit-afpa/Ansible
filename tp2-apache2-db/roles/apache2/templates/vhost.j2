@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+    ServerAdmin {{ serveradmin | default('webmaster@localhost') }}
+
+    DocumentRoot {{ sitepath | default('/var/www/covoit') }}
+
+    <Directory {{ sitepath | default('/var/www/covoit') }}>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/{{ sitename | default('site') }}-error.log
+    CustomLog ${APACHE_LOG_DIR}/{{ sitename | default('site') }}-access.log combined
+</VirtualHost>
