@@ -1,19 +1,24 @@
 - name: apache2
   apt:
     update_cache: yes
+  tags:
+    - apache2
+    - update
 
 - name: Installer apache2
   apt:
     name: apache2
     state: present
-
+  tags:
+    - apache2
+    - install
 
 - name: Supprimer index.html
   file:
     path: /var/www/html/index.html
     state: absent
 
-- name: Répertoire du site
+- name:
   file:
     path: "{{ sitepath }}"
     state: directory

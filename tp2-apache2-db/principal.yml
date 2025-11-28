@@ -16,3 +16,9 @@
     - /home/antho/Ansible/TP-ANSIBLE/tp2-apache2-db/roles/mariadb/vars/vault.yml
   roles:
     - mariadb
+
+
+- hosts: all
+  become: true
+  roles:
+    - robertdebock.fail2ban
